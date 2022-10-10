@@ -1,32 +1,133 @@
 package org.example;
 
+/**
+ * 创建线程方式1：继承Thread类
+ * 1.定义一个MyThread类继承Thread
+ * 2.MyThread类中重写run方法
+ * 3.创建MyThread类对象
+ * 4.启动线程
+ */
+
+/**
+ * 创建线程方式2：实现Runnable接口
+ * 1.定义一个类MyRunnable实现Runnable接口
+ * 2.MyRunnable类中重写run方法
+ * 3.创建MyRunnable类对象
+ * 4.创建Thread类对象，把MyRunnable对象作为构造方法的参数
+ * 5.启动线程
+ */
 
 public class Main {
-    public static void swap(Employee x,Employee y)
-    {
-        Employee temp = x;
-        x=y;
-        y=temp;
-    }
-
     public static void main(String[] args) {
-        Employee employee1=new Employee("张三");
-        Employee employee2=new Employee("李四");
-        System.out.println(employee1);
-        System.out.println(employee1.name);
-        System.out.println(employee2);
-        System.out.println(employee2.name);
 
-        swap(employee1, employee2);
-        System.out.println(employee1);
-        System.out.println(employee1.name);
-        System.out.println(employee2);
-        System.out.println(employee2.name);
+        /**
+         * 无参构造方法
+         * MyThread thread1=new MyThread();
+         * MyThread thread2=new MyThread();
+         * thread1.setName("高铁");
+         * thread2.setName("飞机");
+         * thread1.start();
+         * thread2.start();
+         */
 
-        Integer i1=100;
-        System.out.println(i1);
-        i1=i1*2;
-        System.out.println(i1);
+        /**
+         * 有参构造
+         * MyThread thread1=new MyThread("高铁");
+         * MyThread thread2=new MyThread("飞机");
+         * thread1.start();
+         * thread2.start();
+         */
+
+        //static Thread currentThread() 返回当前正在执行的线程的引用
+//        System.out.println(Thread.currentThread().getName());
+//============================================================================
+        /**
+         * 线程调度模型有两种：
+         * 1.分时调动模型：所有线程轮流使用CPU的使用权，平均分配每个线程占用CPU的时间片
+         * 2.抢占式调用模型：优先让优先级高的线程使用CPU，如果线程的优先级相同，那么会随机选择一个，优先级高的线程获取的时间片相对多一些
+         * Java使用的是抢占式调用模型
+         *
+         * Thread中设置和获取线程优先级的方法
+         * public final int getPriority()
+         * public final void setPriority(int newPriority)
+         */
+
+        /**
+         * MyThread tp1=new MyThread("高铁");
+         * MyThread tp2=new MyThread("飞机");
+         * MyThread tp3=new MyThread("汽车");
+         *
+         *
+         * System.out.println(tp1.getPriority());//默认是5，最高是10，最低是1
+         * System.out.println(tp2.getPriority());
+         * System.out.println(tp3.getPriority());
+         *
+         * tp1.setPriority(5);
+         * tp2.setPriority(10);
+         * tp3.setPriority(1);
+         *
+         * tp1.start();
+         * tp2.start();
+         * tp3.start();
+         */
+//============================================================================
+        /**
+         * 线程控制
+         * static void sleep(long millis) 使当前正在执行的线程停留的毫秒数
+         * void join() 等待这个线程死亡
+         * void setDaemon(boolean on) 将此线程标记为守护线程，当运行的线程都为守护线程时，JVM将退出
+         */
+
+         /*ThreadSleep t1=new ThreadSleep("曹操");
+         ThreadSleep t2=new ThreadSleep("刘备");
+         ThreadSleep t3=new ThreadSleep("孙权");
+
+         t1.start();
+         t2.start();
+         t3.start();*/
+
+
+
+         /*MyThread t1=new MyThread("康熙");
+         MyThread t2=new MyThread("四阿哥");
+         MyThread t3=new MyThread("八阿哥");
+
+         t1.start();
+         try {
+             t1.join();//康熙线程死亡后，其他线程开始执行
+         } catch (InterruptedException e) {
+             throw new RuntimeException(e);
+         }
+         t2.start();
+         t3.start();*/
+
+
+
+         /*MyThread t1=new MyThread("关羽");
+         MyThread t2=new MyThread("张飞");
+
+         //设置主线程为刘备
+         Thread.currentThread().setName("刘备");
+
+         //设置守护线程(主线程死亡后很快退出)
+         t1.setDaemon(true);
+         t2.setDaemon(true);
+
+         t1.start();
+         t2.start();
+
+         for(int i=0;i<10;i++){
+             System.out.println(Thread.currentThread().getName()+":"+i);
+         }*/
+//============================================================================
+        MyRunnable mr=new MyRunnable();
+
+        Thread t1=new Thread(mr,"高铁");
+        Thread t2=new Thread(mr,"动车");
+
+        t1.start();
+        t2.start();
+
 
     }
 }
