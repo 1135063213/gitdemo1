@@ -8,6 +8,12 @@ package org.example;
  * 4.启动线程
  */
 
+import org.example.product.Box;
+import org.example.product.Customer;
+import org.example.product.Producer;
+
+import java.util.*;
+
 /**
  * 创建线程方式2：实现Runnable接口
  * 1.定义一个类MyRunnable实现Runnable接口
@@ -120,13 +126,75 @@ public class Main {
              System.out.println(Thread.currentThread().getName()+":"+i);
          }*/
 //============================================================================
-        MyRunnable mr=new MyRunnable();
+        //实现Runnable接口方式创建线程
+
+        /*MyRunnable mr=new MyRunnable();
 
         Thread t1=new Thread(mr,"高铁");
         Thread t2=new Thread(mr,"动车");
 
         t1.start();
+        t2.start();*/
+//============================================================================
+        /**
+         * 数据安全问题:1.多次输出相同 2.输出负数
+         * 出现情况：1.多线程环境 2.共享数据 3.多条语句操作共享数据
+         * 解决方法：把多条语句操作共享数据的代码给锁起来，让任意时刻只能有一个线程执行即可（同步代码块加锁）
+         */
+        /*SellTickets st=new SellTickets();
+        Thread t1=new Thread(st,"窗口1");
+        Thread t2=new Thread(st,"窗口2");
+        Thread t3=new Thread(st,"窗口3");
+
+        t1.start();
         t2.start();
+        t3.start();*/
+
+        /*//线程安全集合类
+        StringBuffer sb1=new StringBuffer();
+        StringBuilder sb2=new StringBuilder();
+
+        Vector<String> vec1=new Vector<>();
+        ArrayList<String> vec2=new ArrayList<>();
+
+        Hashtable<String,String> hm1=new Hashtable<>();
+        HashMap<String,String> hm2=new HashMap<>();
+
+        //实际中StringBuffer在线程安全中使用，但很少使用Vector和Hashtable，被代替如下
+        List<String> list= Collections.synchronizedList(new ArrayList<>());*/
+
+
+        //利用Lock锁同步
+        /*SellTicketsSecond st=new SellTicketsSecond();
+        Thread t1=new Thread(st,"窗口1");
+        Thread t2=new Thread(st,"窗口2");
+        Thread t3=new Thread(st,"窗口3");
+
+        t1.start();
+        t2.start();
+        t3.start();*/
+//============================================================================
+        /**
+         * Object类中线程等待和唤醒的方法
+         * void wait() 线程等待，直到另一个对象调用该线程对象的notify()方法或者notifyAll()方法
+         * void notify() 唤醒正在等待对象监视器的单个线程
+         * void notifyAll() 唤醒正在等待对象监视器的所有线程
+         */
+
+        /*//创建一个奶箱对象,这是共享数据区域
+        Box box = new Box();
+
+        //创建生产者对象，将奶箱对象作为构造方法参数传递，因为这个类中要调用存储牛奶的操作
+        Producer producer=new Producer(box);
+        //创建生消费者对象，将奶箱对象作为构造方法参数传递，因为这个类中要调用取牛奶的操作
+        Customer customer=new Customer(box);
+
+        Thread t1=new Thread(producer);
+        Thread t2=new Thread(customer);
+
+        t1.start();
+        t2.start();*/
+//============================================================================
 
 
     }
