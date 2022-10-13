@@ -8,10 +8,22 @@ package org.example;
  * 4.启动线程
  */
 
+import org.example.Animal.AnimalOperator;
+import org.example.Animal.Cat;
+import org.example.Animal.Dog;
+import org.example.annotation.MyAnno;
+import org.example.lambdademo.*;
 import org.example.product.Box;
 import org.example.product.Customer;
 import org.example.product.Producer;
+import org.example.reflex.Teacher;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -24,7 +36,7 @@ import java.util.*;
  */
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException, IOException {
 
         /**
          * 无参构造方法
@@ -195,7 +207,201 @@ public class Main {
         t1.start();
         t2.start();*/
 //============================================================================
+        /*AnimalOperator ao=new AnimalOperator();
+        Dog dog=new Dog();
+        ao.useAnimal(dog);*/
+//============================================================================
+/*        Eatable e=new EatableImpl();
+        useEatable(e);
+
+        useEatable(new Eatable(){
+            @Override
+            public void eat(){
+                System.out.println("一天一苹果，医生远离我");
+            }
+        });
+
+        useEatable( ()->{System.out.println("一天一苹果，医生远离我");} );
+
+
+        useConverter( (String s) -> {return Integer.parseInt(s);} );
+        useConverter( s -> Integer.parseInt(s) );
+        useConverter( Integer::parseInt );
+
+
+        usePrinter( s->System.out.println(s.toUpperCase()) );
+        PrintString ps=new PrintString();
+        usePrinter(ps::printUpper);
+
+
+        useMyString( (s,x,y) -> s.substring(x,y));
+        useMyString(String::substring);
+
+        useStudentBuilder((s,i)->new Student(s,i));
+        useStudentBuilder(Student::new);*/
+//============================================================================
+        /*ArrayList arrayList=new ArrayList<>();
+        arrayList.add("ddd");
+        arrayList.add("aa");
+        arrayList.add("c");
+        arrayList.add("bbbb");
+        System.out.println(arrayList);
+
+        Collections.sort(arrayList);
+        System.out.println(arrayList);
+
+        Collections.sort(arrayList,getComparator());
+        System.out.println(arrayList);*/
+//============================================================================
+        /*ClassLoader c=ClassLoader.getSystemClassLoader();
+        System.out.println(c);
+
+        ClassLoader c2=c.getParent();
+        System.out.println(c2);
+
+        ClassLoader c3=c2.getParent();
+        System.out.println(c3);*/
+
+
+        /*//1.使用类的class属性来获取该类对应的Class对象
+        Class<Teacher> c1=Teacher.class;
+        System.out.println(c1);
+
+        Class<Teacher> c2=Teacher.class;
+        System.out.println(c1==c2);
+        System.out.println("--------");
+
+        //2.调用对象的getClass()方法，获取对象所属类对应的Class对象
+        Teacher t1=new Teacher();
+        Class<? extends Teacher> c3 = t1.getClass();
+        System.out.println(c1==c3);
+        System.out.println("--------");
+
+        //3.使用Class类静态方法forName(String className)
+        Class<?> c4 = Class.forName("org.example.reflex.Teacher");
+        System.out.println(c1==c4);*/
+
+
+/*        Class<?> c = Class.forName("org.example.reflex.Teacher");
+        //Constructor<?>[] getConstructors()
+        //返回一个包含Constructor对象的数组 Constructor对象反映了由该Class对象表示的类的所有公共构造函数。
+        //Constructor<?>[] constructors = c.getConstructors();
+        //Constructor<?>[] getDeclaredConstructors()
+        //返回一个反映 Constructor对象表示的类声明的所有构造函数的 Constructor对象的数组 类 。
+        Constructor<?>[] declaredConstructors = c.getDeclaredConstructors();
+        for(Constructor con:declaredConstructors){
+            System.out.println(con);
+        }
+
+        //获取单个构造器,并根据构造器创建对象
+        Constructor<?> constructor = c.getConstructor(String.class,int.class,String.class);
+        Object obj = constructor.newInstance("刘亦菲",18,"武汉");
+        System.out.println(obj);
+
+        //暴力反射，通过私有构造器创建对象
+        Constructor<?> decCon = c.getDeclaredConstructor(String.class);
+        decCon.setAccessible(true);
+
+        Object obj2 = decCon.newInstance("林青霞");
+        System.out.println(obj2);*/
+
+
+        /*Class<?> c = Class.forName("org.example.reflex.Teacher");
+//        Field[] fields=c.getFields();//获取所有公有变量
+        Field[] fields = c.getDeclaredFields();//获取所有变量
+        for(Field field:fields){
+            System.out.println(field);
+        }
+
+        //通过反射设置成员变量值，并赋值给无参构造对象
+        Field addressField = c.getField("address");
+        Constructor<?> con = c.getConstructor();
+        Object obj = con.newInstance();
+        addressField.set(obj,"上海");
+        System.out.println(obj);*/
+
+
+        /*Class<?> c = Class.forName("org.example.reflex.Teacher");
+//        Method[] methods = c.getMethods();//获取所有公有方法，包括被继承的方法
+        Method[] methods = c.getDeclaredMethods();//获取所有公有方法，不包括被继承的方法
+        for(Method method:methods){
+            System.out.println(method);
+        }
+
+        Method m1 = c.getMethod("method1");
+        Constructor<?> con = c.getConstructor();
+        Object obj = con.newInstance();
+        m1.invoke(obj);*/
+
+        //反射练习1：在一个ArrayList<Integer>对象中添加String变量
+        ArrayList<Integer> array=new ArrayList<>();
+        Class<? extends ArrayList> aClass = array.getClass();
+        Method m = aClass.getMethod("add", Object.class);
+        m.invoke(array,"hello");
+        m.invoke(array,"world");
+        m.invoke(array,"Java");
+        System.out.println(array);
+
+
+        //反射练习2：通过配置文件运行类中方法,如果要运行不同类的方法只需要修改我们的配置文件即可
+        /**
+         * class.txt
+         * className=xxx
+         * methodName=xxx
+         * 例如：
+         * className=org.example.reflex.Teacher
+         * methodName=method1
+         */
+        //加载class.txt
+        Properties prop = new Properties();
+        FileReader fr=new FileReader(System.getProperty("user.dir")+"\\class.txt");
+        prop.load(fr);
+        fr.close();
+
+        String className = prop.getProperty("className");
+        String methodName = prop.getProperty("methodName");
+
+        Class<?> aClass1 = Class.forName(className);
+        Constructor<?> constructor = aClass1.getConstructor();
+        Object obj = constructor.newInstance();
+
+//        Method method = aClass1.getMethod(methodName);
+        Method method = aClass1.getDeclaredMethod(methodName);
+        method.setAccessible(true);
+        method.invoke(obj);
+
 
 
     }
+
+/*    private static void useEatable(Eatable e){
+        e.eat();
+    }
+    private static void useConverter(Converter c){
+        int number=c.converter("666");
+        System.out.println(number);
+    }
+    private static void usePrinter(Printer p){
+        p.printUpperCase("Helloworld");
+    }
+    private static void useMyString(MyString ms){
+        String s=ms.mySubString("Helloworld",2,5);
+        System.out.println(s);
+    }
+    private static void useStudentBuilder(StudentBuilder sb){
+        Student s=sb.build("刘亦菲",18);
+        System.out.println(s.getName()+","+s.getAge());
+    }*/
+
+    /*private static Comparator<String> getComparator(){
+        *//*return new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.length()-o2.length();
+            }
+        };*//*
+
+        return (o1,o2)->o1.length()-o2.length();
+    }*/
+
 }
